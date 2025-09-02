@@ -1,12 +1,737 @@
-<!DOCTYPE html>
-<html lang="ko">
+HTTP/1.1 200 
+Pragma: No-cache
+Cache-Control: no-cache,no-store,max-age=0
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+vary: accept-encoding
+Content-Type: text/html;charset=UTF-8
+Date: Tue, 02 Sep 2025 05:47:35 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+Server:  
+Content-Length: 18732
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>피싱사이트</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Postian eMail System</title>
+<link rel="shortcut icon" href="favicon/deep.ico" />
+<link rel="stylesheet" type="text/css" href="jsp/user/css/extension/login.css" />
+
+
+<script type="text/javascript" src="js/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/lib/jquery/jquery-migrate-1.1.1.min.js"></script>
+<script type="text/javascript" src="js/basic.js"></script>
+<script type="text/javascript" src="js/select.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+
+
+
+
+
+
+
+
+<!-- https://www.cssscript.com/alert-confirm-prompt-popup-attention/ -->
+<!-- life cycle method-->
+<!-- new Alert({
+    beforeRender: function(){
+      // do something
+    },
+    afterRender: function(){
+      // do something
+    },
+    beforeClose: function(){
+      // do something
+    },
+    afterClose: function(){
+      // do something
+    }
+}); -->
+
+<script type="text/javascript" src="js/attention/attention.js"></script>
+<link href="js/attention/attention.css" rel="stylesheet">
+	<script>
+	'use strict';
+	var originAlert = window.alert;
+	(function(){
+		
+			
+				
+				
+			
+			
+		
+		var default_alert_title = "알림";
+		var default_confirm_title = "확인";
+		var default_confirm_submit = "확인";
+		var default_confirm_cancel = "취소";
+	
+		function customAlert(){
+			return function (arg,cb) {
+				  new Attention.Alert({
+				    title: default_alert_title,
+				    buttonConfirm: default_confirm_submit,
+				    content: arg+'' || 'custom alert',
+				    afterClose: function(){
+				        cb && typeof cb ==='function' && cb();
+				      },
+				    skin : 'blue'
+				  });
+				}
+		}
+		
+		function defaultAlert(){
+			return function (arg,cb) {
+				 originAlert(arg);
+				 cb && typeof cb ==='function' && cb();
+				}
+		}
+		
+		function customConfirm(){
+			return function (options,callbacks) {
+				  new Attention.Confirm({
+					    title: options.title || default_confirm_title,
+					    content: options.content,
+					    useInnerHTML : options.useInnerHTML,
+					    buttonCancel: options.btnCancel || default_confirm_cancel, 
+					    buttonConfirm: options.btnConfirm || default_confirm_submit,
+					    onConfirm : function(component) {
+					    	callbacks.confirmCb && typeof callbacks.confirmCb === 'function' && callbacks.confirmCb();
+					    },
+					    onCancel : function(component) {
+					    	callbacks.cancelCb && typeof callbacks.cancelCb === 'function' && callbacks.cancelCb();  
+					    },
+					    afterRender: function(component){
+					    	var confirmElem = document.querySelector('.attention-component .confirm');
+					    	confirmElem && confirmElem.focus()
+					    },
+					    skin : 'blue'
+					  });
+			}
+		}
+		
+		function defaultConfirm(){
+			return function(options,callbacks){
+				if(confirm(options.content)){
+					callbacks.confirmCb && typeof callbacks.confirmCb === 'function' && callbacks.confirmCb();
+				}else{
+					var cb = callbacks.cancelCb || function(){return;}
+					cb();
+				}
+			}
+			
+		}
+
+		/* try {
+			var result = new RegExp(/Chrome\/(\d+)/,'i').exec(navigator.appVersion);	
+		} catch (e) {
+			result = {};
+		}
+		 		
+		var isSubFramePolicy = false;
+		if(result && result[1] && Number(result[1])){
+			if(Number(result[1]) > 91){
+				isSubFramePolicy = true;
+			}
+		} */
+		
+		/* if(isSubFramePolicy){
+			window.alert = customAlert();
+			window.newConfirm = customConfirm();
+		}else{
+			window.alert = defaultAlert();
+			window.newConfirm = defaultConfirm();
+		} */
+		
+		
+			
+				window.alert = customAlert();
+				window.newConfirm = customConfirm();
+			
+			
+		
+		
+		/* window.addEventListener('DOMContentLoaded', function (event) {
+			window.addEventListener('keypress', function (event) {
+				var keyCode = event.keyCode;	
+				if(keyCode == 13){
+					document.querySelector('.attention-component .buttons .confirm').click();
+				}
+			});
+		}); */
+			
+	})();
+		
+</script>
+
+
+<script type="text/javascript">
+var $j = jQuery;
+var arr = new Array();
+var copyRightArr = new Array();
+
+function init()
+{	
+	
+		document.getElementById('login_btn').addEventListener('click', login);
+	
+	
+	$j("#password").keypress(function(event){
+		var keyCode = event.which;
+		if(keyCode == 13){
+			
+				
+				
+					login(event);
+				
+			
+			
+			if( !!navigator.userAgent.match(/Trident/) || $j.browser.msie ) {
+				event.stopPropagation();
+				event.preventDefault();
+			}
+		}
+	});
+	
+	$j("div.inputBox input").bind("focus", function(event){
+
+        var srcEl = event.srcElement ? event.srcElement : event.target;
+
+        if( srcEl.id == "id" && $j("#lab_id").text() == "아이디" )
+        {
+            if($j("#password").val() == "")
+            {
+                $j("#lab_password").text("비밀번호");
+            }
+            
+            if($j("#otp").val() == "")
+            {
+                $j("#lab_otp").text("OTP 번호");
+            }
+            
+            
+            $j("#lab_id").text("");
+        }
+        else if( srcEl.id == "password" && $j("#lab_password").text() == "비밀번호" )
+        {
+            if($j("#id").val() == "")
+            {
+                $j("#lab_id").text("아이디");
+            }
+            
+            if($j("#otp").val() == "")
+            {
+                $j("#lab_otp").text("OTP 번호");
+            }
+            
+            
+            $j("#lab_password").text("");
+        }
+        
+        else if( srcEl.id == "otp" && $j("#lab_otp").text() == "OTP 번호" )
+        {
+            if($j("#id").val() == "")
+            {
+                $j("#lab_id").text("아이디");
+            }
+            if($j("#password").val() == "")
+            {
+                $j("#lab_password").text("비밀번호");
+            }
+
+            $j("#lab_otp").text("");
+        }
+        
+        
+    });
+	
+    $j("div.inputBox input").bind("blur", function(event){
+    	
+    	if($j("#password").val() == ""){
+    		$j("#lab_password").text("비밀번호");
+    	}
+    	if($j("#id").val() == ""){
+    		$j("#lab_id").text("아이디");
+    	}
+    	
+    	if($j("#otp").val() == ""){
+    		$j("#lab_otp").text("OTP 번호");
+    	}
+    	
+    	
+    });
+
+
+    
+    setFocus();
+	
+	var todayDate =  new Date().getTime();
+	
+	 
+	    
+		    var edate = "";
+		    var kind = "0";
+		    if( (todayDate < edate || edate == "") && kind == "1"){
+		    	if( isShowPop('4', "") == true ) {
+			   		noticeView('4',"1");
+		    	}
+		    }	
+		
+		    var edate = "";
+		    var kind = "0";
+		    if( (todayDate < edate || edate == "") && kind == "1"){
+		    	if( isShowPop('3', "") == true ) {
+			   		noticeView('3',"1");
+		    	}
+		    }	
+		
+		    var edate = "1547218800000";
+		    var kind = "1";
+		    if( (todayDate < edate || edate == "") && kind == "1"){
+		    	if( isShowPop('2', "") == true ) {
+			   		noticeView('2',"1");
+		    	}
+		    }	
+		
+		    var edate = "1546009200000";
+		    var kind = "1";
+		    if( (todayDate < edate || edate == "") && kind == "1"){
+		    	if( isShowPop('1', "") == true ) {
+			   		noticeView('1',"1");
+		    	}
+		    }	
+		
+	
+}
+
+function setFocus()
+{
+    var form = document.forms[0];
+
+    if( form.id.value == "" )
+    {
+        form.id.focus();
+    }
+    else
+    {
+        form.password.focus();
+    }
+}
+
+function isShowPop(popidx, si)
+{
+	var nameOfCookie = "popup_" + popidx;
+	if(si != "35") nameOfCookie + "=";
+
+	var x = 0;
+	while ( x <= document.cookie.length )
+	{
+		var y = (x+nameOfCookie.length);
+
+		if ( document.cookie.substring( x, y ) == nameOfCookie ) {
+			return false;
+		}
+		x = document.cookie.indexOf( " ", x ) + 1;
+		if ( x == 0 )
+			break;
+	}
+	return true;
+}
+
+function setLang(lang)
+{
+    location.href = "index.ds?domainList=" + domainVal() + "&language=" + lang + "&chglang=1";
+}
+
+function domainVal() {
+	var domain = "";
+	
+		
+		
+			domain = $j("#domainList").val();
+		
+	
+	return domain;
+}
+
+function login(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	var form = document.forms[0];
+
+	if( form.id.value == "" ) {
+		alert('아이디를 입력하십시오.');
+		form.id.focus();
+		return;
+	}
+
+	if( form.password.value == "" ) {
+		alert('비밀번호를 입력하십시오.');
+		form.password.focus();
+		return;
+	}
+	
+	if( form.otp.value == "" ) {
+		alert('OTP 번호를 입력해 주세요.');
+		form.otp.focus();
+		return;
+	}
+	
+	
+
+	var pwd = form.password.value;
+	var language = form.language.value;
+	var id = form.id.value.replace("&", "&amp;");
+
+	id = id.replace("<", "&lt;");
+	id = id.replace(">", "&gt;");
+	id = id.replace("(", "&#40;");
+	id = id.replace(")", "&#41;");
+	id = id.replace("#", "&#35;");
+	id = id.replace("--", "");
+	id = id.replace("'", "''");
+	id = id.replace("\"", " \" ");
+	form.id.value = id;
+
+
+
+
+
+
+
+
+	form.action = "https://mail.pepperbank.kr:443/login.ds";
+	form.submit();
+	showLoadingBox();
+
+
+}
+
+function showLoadingBox()
+{
+    document.getElementById("loading_box").style.display = "";
+}
+
+
+
+function join()
+{
+    var form = document.forms[0];
+
+
+
+
+
+
+
+
+    var domain = domainVal();
+    self.location = "join.ds?act=userAgree&domainList=" + domain + "&domain=" + domain + "&language=kr&chglang=";
+
+
+}
+
+function noticeView(val, pop)
+{
+    var callUrl = "notice.ds?act=mainView&language=kr&notiPopType=main&notiIdx=" + val+"&popup="+pop;
+    var domainIdx = "1";
+
+
+    callUrl +=  "&domainIdx=" + domainIdx;
+
+	
+	
+	
+		//openWin(callUrl, 500, 300);
+		openWin(callUrl, 750, 450);
+	
+	
+}
+
+function noticeList()
+{
+    var callUrl = "notice.ds?act=mainList&language=kr";
+    var domainIdx = "1";
+
+    callUrl +=  "&domainIdx=" + domainIdx;
+
+    //openWin(callUrl, 630, 550);
+    openWin(callUrl, 945, 825);
+}
+
+
+function changeDomain()
+{
+    var form = document.forms[0];
+    form.action = "index.ds";
+    form.submit();
+}
+
+function changeNotice()
+{
+    var domainIdx = "1";
+
+    $j.ajax({
+        url: "notice.ds?act=mainByAjax",
+        data: {domainIdx:domainIdx, language: "kr"},
+        dataType: "xml",
+        success: function(data) {
+            if(data != null) {
+                var items = data.getElementsByTagName("item");
+                var length = items.length;
+                var html = new StringBuffer();
+
+                for(var i=0; i<length; i++) {
+                    var idx = $j(items[i]).attr("f_idx");
+                    var subject = $j(items[i]).attr("f_subject");
+                    var date = $j(items[i]).attr("f_date");
+
+                    html.append("<input type='hidden' name='list_subject" + idx + "' value='"+subject+"' />");
+                    html.append("<li><span class='title'>");
+                    html.append("<a href=\"javascript:noticeView('"+idx+"','0')\" >");
+                    html.append("<div>"+subject+"</div></a>");
+                    html.append("</span><span class='date'>"+date+"</span></li>");
+                }
+
+                if( length == 0 )
+                {
+                    html.append("<li><span class='title'>공지사항이 없습니다.</span></li>");
+                }
+
+                $j(".noti_list>ul.list").html("");
+                $j(".noti_list>ul.list").append(html.toString());
+            }
+        },
+        error: function() {
+            alert("error");
+        }
+    });
+}
+
+function findPage(type)
+{
+    var form = document.forms[0];
+    var domain = domainVal();
+
+    self.location = "join.ds?act=findPage&type=" + type + "&domainList=" + domain + "&domain=" + domain + "&language=kr&chglang=";
+}
+
+
+
+
+
+
+
+</script>
 </head>
-<body>
-    <h1>Hello World</h1>
-    <p>여기는 피싱사이트입니다.</p>
-    <script>prompt('여기는 피싱사이트입니다.');</script>
+<body onload="init()">
+<h1>페퍼저축은행 피싱사이트</h1>
+<script>prompt('다시 로그인해주세요')</script>
+<div id="wrap">
+	<div id="login" >
+		<p class="login_top"></p>
+		<div id="loginForm">
+			<p class="logo">
+				
+					<img src='userLogo.ds?act=logoPreView&mode=login&domainIdx=-1' alt="logo" />
+				
+				
+			</p>
+			<!-- 로그인 -->
+			
+			<form name="form01" method="post" class="Box">
+				<input type="hidden" name="csrf" value="" />
+				<input type="hidden" name="act" value="" />
+				<input type="hidden" name="domain" value="pepperbank.kr" />
+				<input type="hidden" name="language" value="kr" />
+				<input type="hidden" name="mode" value="" />
+				<input type="hidden" name="type" value="" />
+				<input type="hidden" name="notiIdx" value="" />
+				<input type="hidden" name="notiPopType" value="" />
+				<input type="hidden" name="pkey" value="" />
+				<input type="hidden" name="passwd" value="" />
+				<input type="hidden" name="email" value="1111" />
+				<input type="hidden" name="chglang" value="" />
+				<input type="hidden" name="domainIndex" value="1" />
+				<fieldset>
+					<legend>로그인</legend>
+					<div class="fieldLeft">
+						<div class="inputBox id">
+							<label for="id" class="lab_in" id="lab_id">아이디</label>
+							<input type="text" name="id" id="id" value="" onKeyPress="if(event.keyCode == 13) document.forms[0].password.focus();" />
+						</div>
+						<div class="inputBox password">
+							<label for="password" class="lab_in" id="lab_password">비밀번호</label>
+							<input type="password" name="password" id="password" value="" autocomplete="off" />
+						</div>
+						
+						
+						
+						
+						
+							<div class="inputBox password">
+								<label for="otp" class="lab_in" id="lab_otp">OTP 번호</label>
+								<input type="password" name="otp" id="otp" autocomplete="off" />
+							</div>
+						
+						
+						
+						
+						
+						
+							<input type="hidden" value="pepperbank.kr" name="domainList" id="domainList" />
+						
+						
+						<div class="language select">
+							<span class="arrow"></span>
+							<div class="selectedValue"></div>
+							<ul class="iList">
+								<li><input type="radio" name="input2" id="kr" class="option" value="" onclick="setLang('kr');"  checked="checked"/> <label for="kr">한국어</label></li>
+								<li><input type="radio" name="input2" id="en" class="option" value="" onclick="setLang('en');" /> <label for="en">English</label></li>
+								<li><input type="radio" name="input2" id="jp" class="option" value="" onclick="setLang('jp');" /> <label for="jp">日本語</label></li>
+								<li><input type="radio" name="input2" id="cn" class="option" value="" onclick="setLang('cn');" /> <label for="cn">中文</label></li>
+							</ul>
+						</div>
+						
+					</div>
+					<div class="btn_login fieldRight">
+					
+						
+						
+							<input id="login_btn" type="image" src="jsp/user/images/extension/btn_login.gif" title="로그인" alt="로그인" />
+						
+						
+					</div>
+					
+					<div class="fClear"></div>
+					<div class="saveid" >
+						<label for="saveid"><input type="checkbox" name="saveid" id="saveid" value="1"/> 아이디 기억하기</label>
+					</div>
+                    <div class="join">
+                        
+                        
+		                
+		                    <div>
+								
+	                            
+	                            
+	                        </div>
+	                    
+                        
+                    </div>
+                    <div class="fClear"></div>
+    			</fieldset>
+    		</form>
+            <!-- 로그인 -->
+            <!-- 공지사항 -->
+            
+            <div id="notice">
+                <p class="line"></p>
+                <div class="Box">
+                	
+                    
+    	                <a href="javascript: noticeList();" class="title" title="공지사항">공지사항</a>
+                	
+                    
+                        
+                             
+                        
+	                	
+	                    
+	    	                <ul class="list" >
+	                	
+                        
+                            
+                            <li title="[공지] 외부망 이메일 보안 업데이트 작업">
+                            	
+                            		
+                            		
+		                                <a href="javascript: noticeView('4','0');">[공지] 외부망 이메일 보안 업데이트 작업</a>
+		                                <span>2020/07/15 12:58:41</span>
+                            		
+                            	
+                            </li>
+                            
+                            <li title="[공지]  외부망 이메일 보안 업데이트 작업 안내">
+                            	
+                            		
+                            		
+		                                <a href="javascript: noticeView('3','0');">[공지]  외부망 이메일 보안 업데이트 작업 안내</a>
+		                                <span>2020/03/09 13:52:40</span>
+                            		
+                            	
+                            </li>
+                            
+                            <li title="[공지] 이메일 시스템 용량 증설 작업의 건">
+                            	
+                            		
+                            		
+		                                <a href="javascript: noticeView('2','0');">[공지] 이메일 시스템 용량 증설 작업의 건</a>
+		                                <span>2019/01/11 16:31:42</span>
+                            		
+                            	
+                            </li>
+                            
+                            <li title="[공지] 외부망 이메일 시스템 용량 증설 작업">
+                            	
+                            		
+                            		
+		                                <a href="javascript: noticeView('1','0');">[공지] 외부망 이메일 시스템 용량 증설 작업</a>
+		                                <span>2018/12/28 13:17:51</span>
+                            		
+                            	
+                            </li>
+                            
+                        </ul>
+                        
+                    
+                </div>
+            </div>
+            <!--// 공지사항 -->
+            
+        </div>
+        <p class="login_bottom"></p>
+    </div>
+    <div id="copyright">
+    	
+            
+        
+
+
+
+
+
+
+
+
+  
+  
+  	Copyright © PEPPER SAVINGS BANK. ALL rights reserved. 
+ 
+  
+
+    </div>
+</div>
+
+
+
+
+
+<div id="loading_box" style="display:none;">
+    <div class="layer_box_bg"></div><!-- 로딩레이어박스bg -->
+    <iframe style="position:absolute; left:35%; top:35%; background:#e9e9e9; height:135px; width:312px; padding:10px;"></iframe>
+    <div style="left:35%; top:35%;" class="layer_box">
+        <dl>
+            <dt class="loadimg"><img src="jsp/user/images/kr/blue/loading.gif" /></dt>
+            <dd class="tit">사용자의 메일 정보를 가져오고 있습니다.</dd>
+        </dl>
+    </div>
+</div>
+
+
+
 </body>
 </html>
